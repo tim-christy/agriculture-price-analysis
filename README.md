@@ -1,6 +1,6 @@
-# Project Name
+# Agriculture Price Analysis
 
-#### -- Project Status: [Active, On-Hold, Completed]
+#### -- Project Status: [Active]
 
 ## Project Intro/Objective
 The purpose of this project is ________. (Describe the main goals of the project and potential civic impact. Limit to a short paragraph, 3-6 Sentences)
@@ -8,7 +8,7 @@ The purpose of this project is ________. (Describe the main goals of the project
 ### Collaborators
 |Name     |  Github Page   |  Personal Website  |
 |---------|-----------------|--------------------|
-|Tim Christy | [tim-christy](https://github.com/tim-christy)| [www.mishaberrien.com](https://tim-christy.io/)  |
+|Tim Christy | [tim-christy](https://github.com/tim-christy)| [www.timchristy.io](https://tim-christy.io/)  |
 |-------| [---](#) | --- |
 
 ### Methods Used
