@@ -6,9 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-jupyterlab = "*"
-urllib = "*"
-beautifulsoup = "*"
+pandas = "*"
 beautifulsoup4 = "*"
 
 [requires]
