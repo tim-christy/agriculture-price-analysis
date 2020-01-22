@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup as soup
 import pandas as pd 
+import sqlite3
 
 
 
@@ -212,3 +213,38 @@ def make_db(cursor, connection, dataframe):
     '''
     for row in range(0, len(dataframe)-1):
         insert_row(cursor, connection, dataframe.iloc[row])
+        
+
+def download_data_from_db(path):
+    '''
+    Description: Downloads all data in database and stores it in a dataframe
+    Parameters: path to database
+    Returns: dataframe containing all data in database
+    '''
+    conn = sqlite3.connect(path)
+    c = conn.cursor()
+    produce_df = pd.DataFrame(c.execute('''SELECT * FROM agriculture_prices''').fetchall())
+    produce_df.columns = ['Farm Price', 'Atlanta Retail', 'Chicago Retail', 'Los Angeles Retail', 'NYC Retail', 'Avg Spread', 'Commodity', 'Date']
+    produce_df.index = pd.to_datetime(produce_df['Date'])
+    produce_df.drop(columns=['Date'], inplace=True)
+    conn.close()
+    return produce_df
+
+
+
+def make_dictionary_of_dataframes(dataframe):
+    '''
+    Description: Splits dataframe up by commodity and stores in a dictionary. This creates a dictionary of 
+                 dataframes where the key is the produce name and value is the dataframe corresponding to that
+                 produce.
+    Parameters: Dataframe to be split
+    Returns: Dictionary of dataframes
+    '''
+    produce_list = list(dataframe['Commodity'].unique())
+    produce_dict = dict()
+    for produce in produce_list:
+        df_copy = dataframe[dataframe['Commodity'] == produce].copy() # Copying by slicing gives warning error
+        produce_dict.setdefault(produce, df_copy)
+        
+    return produce_dict
+    
