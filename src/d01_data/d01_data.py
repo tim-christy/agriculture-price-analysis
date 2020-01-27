@@ -2,7 +2,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup as soup
 import pandas as pd 
 import sqlite3
-
+import numpy as np
 
 
 def scrape_page_data(url):
@@ -247,4 +247,107 @@ def make_dictionary_of_dataframes(dataframe):
         produce_dict.setdefault(produce, df_copy)
         
     return produce_dict
+
+
+
+def count_na(df):
+    '''
+    Description: Counts the number of NaN values in a data frame
+    Parameters: df - The dataframe to be checked
+    Returns: None. Prints our the percentage of each column that is nan
+    '''
+    # Anywhere a price is equal to or less than zero, assign it to NaN
+    df[df.loc[:, ['Farm Price', 'Atlanta Retail', 'Chicago Retail', 'Los Angeles Retail', 'NYC Retail']] <= 0] = np.nan
+    print(f'Percentage NaN for {df.iloc[0, -1]}: \n {round((df.isna().sum())/len(df), 3)*100}')
+    print(' ')
+    
+    
+    
+def drop_all_na(df):
+    '''
+    Description: Drops all rows in a dataframe that have values of NaN
+    Parameters: df - the dataframe to have NaN values dropped
+    Returns: the dataframe with all NaN values taken out
+    '''
+    
+    df_return = df.dropna(inplace=True)
+    return df_return
+
+
+
+def drop_all_dupes(df):
+    '''
+    Description: Drops all duplicates in a dataframe
+    Parameters: dataframe to drop all duplicates
+    returns: deduplicated dataframe
+    '''
+    df_return = df.drop_duplicates(inplace=True)
+    
+    return df_return
+
+
+
+
+def inflation_adjustment_for_df(df):
+    '''
+    Description: Adjusts all individual prices in a dataframe to December 2019. That is, it adjusts for inflation and 
+                 reflects the value of a dollar in December 2019. Also creates an average retail column with stdev
+    Parameter: Dataframe to be adjusted
+    Returns: Inflation adjusted dataframe and an appended average column and stdev column
+    '''
+    cpi_df = pd.read_csv('../../data/00_raw/cpi.csv', index_col=0, header=1)
+    cpi_cols = ['1', '2', '3' , '4', '5', '6', '7', '8', '9', '10', '11', '12', 'Avg', 'Dec-Dec', 'Avg-Avg']
+    cpi_df.columns = cpi_cols
+    CPI_2019 = cpi_df.loc[2019][10]
+    farm = []
+    atl = []
+    chi=[]
+    la=[]
+    nyc =[]
+
+    for index_row in df.index:
+        count = 0
+        for column in df.columns:
+            conversion = (CPI_2019/cpi_df.loc[index_row.year][index_row.month - 1])
+            value = df[str(index_row)][str(column)].values[0]*conversion
+            if column == 'Farm Price':
+                farm.append(round(value, 2))
+            elif column == 'Atlanta Retail':
+                atl.append(round(value,2))
+
+            elif column == 'Chicago Retail':
+                chi.append(round(value, 2))
+
+            elif column == 'Los Angeles Retail':
+                la.append(round(value, 2))
+
+            elif column == 'NYC Retail':
+                nyc.append(round(value,2))
+
+            count+=1
+            if count == 5:
+                break
+
+
+
+    adj_2019_dict = {}
+
+    adj_2019_dict.setdefault('2019 Farm Price', farm)
+    adj_2019_dict.setdefault('2019 Atlanta retail', atl)
+    adj_2019_dict.setdefault('2019 Chicago Retail', chi)
+    adj_2019_dict.setdefault('2019 Los Angeles Retail',la)
+    adj_2019_dict.setdefault('2019 NYC Retail', nyc)
+    adj_2019_dict.setdefault('Avg Spread', list(df['Avg Spread']))
+    adj_2019_dict.setdefault('Commodity', list(df['Commodity']))
+    df_2019_adj = pd.DataFrame(adj_2019_dict)
+    df_2019_adj.index = df.index
+    
+    
+    avg_retail = [round(np.mean(x[1:5]),2) for x in df.values]
+    avg_retail_var = [round(np.var(x[1:5],ddof=1), 2) for x in df.values] 
+    df_2019_adj['Avg_Retail'] = avg_retail
+    df_2019_adj['Avg_Retail_Var'] = avg_retail_var
+
+    
+    return df_2019_adj
     
