@@ -3,7 +3,7 @@
 #### -- Project Status: [Active]
 
 ## Project Intro/Objective
-The purpose of this project is ________. (Describe the main goals of the project and potential civic impact. Limit to a short paragraph, 3-6 Sentences)
+The purpose of this analysis is provide preliminary work for a larger project; the objective of which is to observe average agricultural prices nation-wide in relation to weather, climate, global temperatures, oil prices, and other factor effects. This analysis exercises web-scraping techniques, data cleaning, feature engineering, as well as descriptive and inferential statistics with data visualizations. This analysis observes annual price trends with 95% confidence for various produce items nation-wide as well as average monthly trends over the a ~20 years the data spans.
 
 ### Collaborators
 |Name     |  Github Page   |  Personal Website  |
@@ -12,21 +12,17 @@ The purpose of this project is ________. (Describe the main goals of the project
 |-------| [---](#) | --- |
 
 ### Methods Used
+* Web Scraping
+* Data Cleaning
+* Feature Engineering
 * Inferential Statistics
-* Machine Learning
 * Data Visualization
-* Predictive Modeling
-* etc.
+
 
 ### Technologies
-* R
 * Python
-* D3
-* PostGres, MySql
-* Pandas, jupyter
-* HTML
-* JavaScript
-* etc.
+* numpy, pandas, matplotlib, seaborn, beautifulsoup4, scipy
+
 
 ## Project Description
 (Provide more detailed overview of the project.  Talk a bit about your data sources and what questions and hypothesis you are exploring. What specific data analysis/visualization and modelling work are you using to solve the problem? What blockers and challenges are you facing?  Feel free to number or bullet point things here)

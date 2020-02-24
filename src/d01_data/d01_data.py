@@ -223,7 +223,7 @@ def download_data_from_db(path):
     '''
     conn = sqlite3.connect(path)
     c = conn.cursor()
-    produce_df = pd.DataFrame(c.execute('''SELECT * FROM agriculture_prices''').fetchall())
+    produce_df = pd.DataFrame(c.execute('''SELECT * FROM produce_prices''').fetchall())
     produce_df.columns = ['Farm Price', 'Atlanta Retail', 'Chicago Retail', 'Los Angeles Retail', 'NYC Retail', 'Avg Spread', 'Commodity', 'Date']
     produce_df.index = pd.to_datetime(produce_df['Date'])
     produce_df.drop(columns=['Date'], inplace=True)
